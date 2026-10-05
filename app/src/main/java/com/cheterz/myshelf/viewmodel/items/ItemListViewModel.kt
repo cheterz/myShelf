@@ -24,8 +24,10 @@ class ItemListViewModel(application: Application) : AndroidViewModel(application
                     Item(
                         id = entity.id,
                         title = entity.title,
+                        description = entity.description,
                         category = entity.category,
-                        status = entity.status
+                        status = entity.status,
+                        imageUri = entity.imageUri
                     )
                 }
             }

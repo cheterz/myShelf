@@ -14,7 +14,7 @@ interface ItemDAO {
     fun getAllItems(): Flow<List<ItemEntity>>
 
     @Insert
-    suspend fun insertItem(item: ItemEntity)
+    suspend fun insertItem(item: ItemEntity): Long
 
     @Delete
     suspend fun deleteItem(item: ItemEntity)

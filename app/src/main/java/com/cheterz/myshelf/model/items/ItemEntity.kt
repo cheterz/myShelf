@@ -6,8 +6,11 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "items")
 data class ItemEntity(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
     val title: String,
+    val description: String? = null,
     val category: String,
-    val status: String
+    val status: String,
+    val imageUri: String? = null
 )

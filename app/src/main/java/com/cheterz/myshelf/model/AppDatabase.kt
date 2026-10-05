@@ -9,7 +9,7 @@ import com.cheterz.myshelf.model.items.ItemEntity
 import com.cheterz.myshelf.model.loans.LoanDAO
 import com.cheterz.myshelf.model.loans.LoanEntity
 
-@Database(entities = [ItemEntity::class, LoanEntity::class], version = 2)
+@Database(entities = [ItemEntity::class, LoanEntity::class], version = 4)
 abstract class AppDatabase: RoomDatabase(){
     abstract fun itemDAO(): ItemDAO
     abstract fun loanDAO(): LoanDAO
