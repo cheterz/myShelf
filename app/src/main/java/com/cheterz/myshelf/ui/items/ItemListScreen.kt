@@ -41,7 +41,8 @@ fun ItemsListContent(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = onAddClick
+                onClick = onAddClick,
+                modifier = Modifier.testTag(TestTags.ItemsList.ADD_BUTTON)
             ) {
                 Text("+")
             }
