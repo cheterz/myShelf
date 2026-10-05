@@ -22,10 +22,26 @@ import com.cheterz.myshelf.viewmodel.items.ItemListViewModel
 fun ItemListScreen(
     viewModel: ItemListViewModel = viewModel()
 ) {
+    ItemsListContent(
+        items = viewModel.items,
+        onAddClick = { viewModel.addFakeItem() },
+//        TODO add remove method
+        onDeleteClick = {}
+
+    )
+}
+
+@Composable
+fun ItemsListContent(
+    items: List<Item>,
+    onAddClick: () -> Unit,
+    onDeleteClick: () -> Unit
+
+) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { viewModel.addFakeItem() }
+                onClick = onAddClick
             ) {
                 Text("+")
             }
@@ -42,13 +58,13 @@ fun ItemListScreen(
                     .weight(1f)
                     .fillMaxWidth()
             ) {
-                items(viewModel.items) { item ->
+                items(items) { item ->
                     ItemRow(item)
                 }
             }
 
             Button(
-                onClick = { },
+                onClick = onDeleteClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
