@@ -1,6 +1,11 @@
-package com.cheterz.myshelf.ui
+package com.cheterz.myshelf.ui.loans
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -13,18 +18,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.cheterz.myshelf.model.items.Item
-import com.cheterz.myshelf.viewmodel.items.ItemListViewModel
-
+import com.cheterz.myshelf.model.loans.Loan
+import com.cheterz.myshelf.ui.common.TestTags
+import com.cheterz.myshelf.ui.common.formatDate
+import com.cheterz.myshelf.viewmodel.loans.LoanListViewModel
 
 @Composable
-fun ItemListScreen(
-    viewModel: ItemListViewModel = viewModel()
+fun LoansListScreen(
+    viewModel: LoanListViewModel = viewModel()
 ) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { viewModel.addFakeItem() }
+                onClick = { viewModel.addFakeLoan() }
             ) {
                 Text("+")
             }
@@ -41,8 +47,8 @@ fun ItemListScreen(
                     .weight(1f)
                     .fillMaxWidth()
             ) {
-                items(viewModel.items) { item ->
-                    ItemRow(item)
+                items(viewModel.loans) { loan ->
+                    LoanRow(loan)
                 }
             }
 
@@ -51,7 +57,7 @@ fun ItemListScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
-                    .testTag(TestTags.ItemsList.REMOVE_BUTTON)
+                    .testTag(TestTags.LoansList.REMOVE_BUTTON)
             ) {
                 Text("Удалить последнее")
             }
@@ -59,20 +65,20 @@ fun ItemListScreen(
     }
 }
 
-
 @Composable
-fun ItemRow(item: Item) {
+fun LoanRow(loan: Loan) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .testTag(TestTags.ItemsList.ITEM_ROW)
+            .testTag(TestTags.LoansList.LOAN_ROW)
     ) {
         Column {
-            Text(text = item.title, style = MaterialTheme.typography.titleMedium)
-            Text(text = item.category)
+            Text(text = loan.itemTitle, style = MaterialTheme.typography.titleMedium)
+            Text(text = loan.contact)
+            Text(text = "Отдан: ${formatDate(loan.loanedDate)}")
+            Text(text = "Вернуть до: ${formatDate(loan.plannedReturnDate)}")
         }
         Spacer(modifier = Modifier.weight(1f))
-        Text(text = item.status)
     }
 }

@@ -8,7 +8,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
-import com.cheterz.myshelf.ui.TestTags
+import com.cheterz.myshelf.ui.common.TestTags
 import org.junit.Rule
 import org.junit.Test
 
