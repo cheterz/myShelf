@@ -7,14 +7,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.cheterz.myshelf.model.AppDatabase
-import com.cheterz.myshelf.model.items.Item
-import com.cheterz.myshelf.model.items.ItemDAO
 import com.cheterz.myshelf.model.items.ItemEntity
 import com.cheterz.myshelf.model.loans.Loan
 import com.cheterz.myshelf.model.loans.LoanEntity
 import kotlinx.coroutines.launch
 
-class LoanListViewModel(application: Application) : AndroidViewModel(application) {
+class LoansListViewModel(application: Application) : AndroidViewModel(application) {
     private val dao = AppDatabase.getDatabase(application).loanDAO()
     private val itemDAO = AppDatabase.getDatabase(application).itemDAO()
 

@@ -21,16 +21,30 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cheterz.myshelf.model.loans.Loan
 import com.cheterz.myshelf.ui.common.TestTags
 import com.cheterz.myshelf.ui.common.formatDate
-import com.cheterz.myshelf.viewmodel.loans.LoanListViewModel
+import com.cheterz.myshelf.viewmodel.loans.LoansListViewModel
 
 @Composable
 fun LoansListScreen(
-    viewModel: LoanListViewModel = viewModel()
+    viewModel: LoansListViewModel = viewModel()
+) {
+    LoansListContent(
+        loans = viewModel.loans,
+        onAddClick = { viewModel.addFakeLoan() },
+//        TODO add remove method
+        onDeleteClick = {}
+    )
+}
+
+@Composable
+fun LoansListContent(
+    loans: List<Loan>,
+    onAddClick: () -> Unit,
+    onDeleteClick: () -> Unit,
 ) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { viewModel.addFakeLoan() }
+                onClick = onAddClick
             ) {
                 Text("+")
             }
@@ -47,13 +61,13 @@ fun LoansListScreen(
                     .weight(1f)
                     .fillMaxWidth()
             ) {
-                items(viewModel.loans) { loan ->
+                items(loans) { loan ->
                     LoanRow(loan)
                 }
             }
 
             Button(
-                onClick = { },
+                onClick = onDeleteClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
