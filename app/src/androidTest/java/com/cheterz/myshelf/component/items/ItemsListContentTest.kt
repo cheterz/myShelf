@@ -8,6 +8,8 @@ import androidx.compose.ui.test.onNodeWithText
 import com.cheterz.myshelf.common.TestData
 import com.cheterz.myshelf.ui.common.TestTags
 import com.cheterz.myshelf.ui.items.ItemsListContent
+import io.qameta.allure.kotlin.Allure
+//import io.qameta.allure.kotlin.Allure
 import org.junit.Rule
 import org.junit.Test
 
@@ -25,7 +27,9 @@ class ItemsListContentTest {
                 onDeleteClick = {},
             )
         }
-        composeRule.onAllNodesWithTag(TestTags.ItemsList.ITEM_ROW).assertCountEquals(0)
+        Allure.step("Assert: empty list") {
+            composeRule.onAllNodesWithTag(TestTags.ItemsList.ITEM_ROW).assertCountEquals(0)
+        }
     }
 
     @Test
@@ -39,8 +43,12 @@ class ItemsListContentTest {
                 onDeleteClick = {},
             )
         }
-        composeRule.onAllNodesWithTag(TestTags.ItemsList.ITEM_ROW).assertCountEquals(1)
-        composeRule.onNodeWithText("Hammer").assertIsDisplayed()
+        Allure.step("Assert: one row is displayed") {
+            composeRule.onAllNodesWithTag(TestTags.ItemsList.ITEM_ROW).assertCountEquals(1)
+        }
+        Allure.step("Assert: 'Hammer' text is displayed") {
+            composeRule.onNodeWithText("Hammer").assertIsDisplayed()
+        }
     }
 
     @Test
@@ -71,6 +79,8 @@ class ItemsListContentTest {
                 onDeleteClick = {},
             )
         }
-        composeRule.onAllNodesWithTag(TestTags.ItemsList.ITEM_ROW).assertCountEquals(3)
+        Allure.step("Assert: three rows is displayed") {
+            composeRule.onAllNodesWithTag(TestTags.ItemsList.ITEM_ROW).assertCountEquals(3)
+        }
     }
 }
