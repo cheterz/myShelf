@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.cheterz.myshelf.model.AppDatabase
 import com.cheterz.myshelf.model.items.Item
 import com.cheterz.myshelf.model.items.ItemEntity
+import com.cheterz.myshelf.model.items.ItemStatus
 import kotlinx.coroutines.launch
 
 class ItemListViewModel(application: Application) : AndroidViewModel(application) {
@@ -34,13 +35,14 @@ class ItemListViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun addFakeItem(){
+    fun addItem(title: String, description: String?, category: String) {
         viewModelScope.launch {
             dao.insertItem(
                 ItemEntity(
-                    title = "New thing",
-                    category = "OTHER",
-                    status = "AVAILABLE"
+                    title = title,
+                    description = description,
+                    category = category,
+                    status = ItemStatus.HOME.name
                 )
             )
         }
