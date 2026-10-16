@@ -9,13 +9,21 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import com.cheterz.myshelf.R
 import com.cheterz.myshelf.common.TestData
 import com.cheterz.myshelf.ui.common.TestTags
 import com.cheterz.myshelf.ui.items.ItemsListContent
 import io.qameta.allure.kotlin.Allure
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertFalse
+import org.hamcrest.CoreMatchers.`is`
 import org.junit.Rule
 import org.junit.Test
 
@@ -100,5 +108,78 @@ class ItemsListContentTest {
         }
         composeRule.onNodeWithTag(TestTags.ItemsList.ADD_BUTTON).performClick()
         Espresso.onView(withId(com.cheterz.myshelf.R.id.titleInput)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun dialog_enterData_andSave_callsOnAddClickWithData() {
+        var capturedTitle: String? = null
+        var capturedDescription: String? = null
+        var capturedCategory: String? = null
+
+        composeRule.setContent {
+            ItemsListContent(items = emptyList(), onAddClick = { title, description, category ->
+                capturedTitle = title
+                capturedDescription = description
+                capturedCategory = category
+            }, onDeleteClick = {})
+        }
+        composeRule.onNodeWithTag(TestTags.ItemsList.ADD_BUTTON).performClick()
+        Espresso.onView(withId(R.id.titleInput)).perform(typeText("HAMMER"))
+        Espresso.onView(withId(R.id.descriptionInput)).perform(typeText("old hammer"))
+        Espresso.onView(withText("SAVE")).perform(click())
+
+        assertEquals("HAMMER", capturedTitle)
+        assertEquals("old hammer", capturedDescription)
+        assertEquals("TOOLS", capturedCategory)
+    }
+
+    @Test
+    fun dialog_cancel_doesNotCallOnAddClick() {
+        var called = false
+        composeRule.setContent {
+            ItemsListContent(
+                items = emptyList(),
+                onAddClick = { _, _, _ -> called = true },
+                onDeleteClick = {})
+        }
+        composeRule.onNodeWithTag(TestTags.ItemsList.ADD_BUTTON).performClick()
+        Espresso.onView(withText("CANCEL")).perform(click())
+
+        assertFalse(called)
+    }
+
+    @Test
+    fun dialog_emptyTitle_andSave_doesNotCallOnAddClick() {
+        var called = false
+        composeRule.setContent {
+            ItemsListContent(
+                items = emptyList(),
+                onAddClick = { _, _, _ -> called = true },
+                onDeleteClick = {})
+        }
+        composeRule.onNodeWithTag(TestTags.ItemsList.ADD_BUTTON).performClick()
+        Espresso.onView(withText("SAVE")).perform(click())
+
+        assertFalse(called)
+    }
+
+    @Test
+    fun dialog_selectCategory_fromSpinner_passesCorrectCategory() {
+        var capturedCategory: String? = null
+        composeRule.setContent {
+            ItemsListContent(
+                items = emptyList(),
+                onAddClick = { _, _, category -> capturedCategory = category },
+                onDeleteClick = {}
+            )
+        }
+        composeRule.onNodeWithTag(TestTags.ItemsList.ADD_BUTTON).performClick()
+        Espresso.onView(withId(R.id.titleInput)).perform(typeText("Dune"))
+        Espresso.onView(withId(R.id.categorySpinner)).perform(click())
+        Espresso.onData(`is`("BOOKS"))
+            .inRoot(RootMatchers.isPlatformPopup())
+            .perform(click())
+        Espresso.onView(withText("SAVE")).perform(click())
+        assertEquals("BOOKS", capturedCategory)
     }
 }
