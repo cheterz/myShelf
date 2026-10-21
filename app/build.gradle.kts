@@ -56,10 +56,10 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
-////    KASPRESSO
-//    androidTestImplementation("com.kaspersky.android-components:kaspresso:1.5.5")
-//    androidTestImplementation("com.kaspersky.android-components:kaspresso-allure-support:1.5.5")
-//
+//    KASPRESSO
+    androidTestImplementation("com.kaspersky.android-components:kaspresso:1.5.5")
+    androidTestImplementation("com.kaspersky.android-components:kaspresso-allure-support:1.5.5")
+
 //    ALLURE
     androidTestImplementation("io.qameta.allure:allure-kotlin-model:2.4.0")
     androidTestImplementation("io.qameta.allure:allure-kotlin-commons:2.4.0")
