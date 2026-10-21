@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     timeout-minutes: 45 # защита от зависшего эмулятора
 
     steps:
@@ -30,22 +30,43 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      - name: AVD cache
+        uses: actions/cache@v4
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ runner.os }}-api-34
+
+      - name: Create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          profile: pixel_3a
+          target: google_apis
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          script: echo "Generated AVD snapshot for caching."
+
       # ← ЭМУЛЯТОР + ТЕСТЫ
       - name: Run instrumented tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 34 # твой targetSdk
-          arch: x86_64 # для Ubuntu
+          api-level: 34
+          arch: x86_64
           profile: pixel_3a
-          target: google_apis # без Play Store — легче
+          target: google_apis
           disable-animations: true
-          script: ./gradlew connectedDebugAndroidTest
+          emulator-boot-timeout: 900 # 15 минут на загрузку
+          script: |
+            ./gradlew connectedDebugAndroidTest
+            adb pull /storage/emulated/0/Documents/allure-results ./allure-results || true
 
       # ← ОТЧЁТ (даже если тесты упали)
-      - name: Pull Allure results
-        if: always()
-        run: adb pull /storage/emulated/0/Documents/allure-results ./allure-results || true
-
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v4
