@@ -16,7 +16,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "io.qameta.allure.android.runners.AllureAndroidJUnitRunner"
+        testInstrumentationRunner = "com.kaspersky.kaspresso.runner.KaspressoRunner"
     }
 
     buildTypes {
@@ -59,6 +59,7 @@ dependencies {
 //    KASPRESSO
     androidTestImplementation("com.kaspersky.android-components:kaspresso:1.5.5")
     androidTestImplementation("com.kaspersky.android-components:kaspresso-allure-support:1.5.5")
+    androidTestImplementation("io.github.kakaocup:kakao:3.2.0")
 
 //    ALLURE
     androidTestImplementation("io.qameta.allure:allure-kotlin-model:2.4.0")
