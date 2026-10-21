@@ -9,27 +9,35 @@ on:
 jobs:
   test:
     runs-on: ubuntu-22.04
-    timeout-minutes: 45 # защита от зависшего эмулятора
+    timeout-minutes: 45
 
     steps:
+      # ========== ЭТАП 1: ПОДГОТОВКА ==========
+
+      # 1. Скачать код из репозитория
       - uses: actions/checkout@v4
 
+      # 2. Установить Java 17 (нужна для Gradle)
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: "17"
           distribution: "temurin"
 
+      # 3. Настроить кэш Gradle (ускоряет сборку)
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      # ← ВКЛЮЧАЕМ KVM (аппаратное ускорение)
+      # ========== ЭТАП 2: ЭМУЛЯТОР ==========
+
+      # 4. Включить KVM (аппаратное ускорение эмулятора)
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      # 5. Закэшировать AVD (чтобы не создавать с нуля каждый раз)
       - name: AVD cache
         uses: actions/cache@v4
         id: avd-cache
@@ -39,6 +47,7 @@ jobs:
             ~/.android/adb*
           key: avd-${{ runner.os }}-api-34
 
+      # 6. Создать AVD + снапшот (только если кэша нет)
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
@@ -52,7 +61,9 @@ jobs:
           disable-animations: false
           script: echo "Generated AVD snapshot for caching."
 
-      # ← ЭМУЛЯТОР + ТЕСТЫ
+      # ========== ЭТАП 3: ТЕСТЫ ==========
+
+      # 7. Запустить тесты + вытянуть Allure-результаты
       - name: Run instrumented tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -61,26 +72,14 @@ jobs:
           profile: pixel_3a
           target: google_apis
           disable-animations: true
-          emulator-boot-timeout: 900 # 15 минут на загрузку
+          emulator-boot-timeout: 900
           script: |
             ./gradlew connectedDebugAndroidTest
             adb pull /storage/emulated/0/Documents/allure-results ./allure-results || true
 
-      # ← ОТЧЁТ (даже если тесты упали)
-      - name: Upload test report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-report
-          path: app/build/reports/androidTests/connected/
+      # ========== ЭТАП 4: ОТЧЁТ ==========
 
-      - name: Generate Allure report
-        if: always()
-        run: |
-          wget https://github.com/allure-framework/allure2/releases/download/2.32.0/allure-2.32.0.tgz
-          tar -xzf allure-2.32.0.tgz
-          ./allure-2.32.0/bin/allure generate ./allure-results -o ./allure-report --clean
-
+      # 8. Скачать историю отчётов из gh-pages (если есть)
       - name: Load Allure history
         uses: actions/checkout@v4
         if: always()
@@ -89,7 +88,8 @@ jobs:
           ref: gh-pages
           path: gh-pages
 
-      - name: Build Allure report with history
+      # 9. Сгенерировать Allure-отчёт с историей
+      - name: Build Allure report
         uses: simple-elf/allure-report-action@v1.15
         if: always()
         with:
@@ -97,6 +97,12 @@ jobs:
           allure_history: allure-history
           allure_results: ./allure-results
 
+      # 10. Очистить .git из allure-history (чтобы не было EACCES)
+      - name: Clean allure-history from .git
+        if: always()
+        run: rm -rf allure-history/.git || true
+
+      # 11. Опубликовать отчёт на GitHub Pages
       - name: Publish Allure report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         if: always()
@@ -104,10 +110,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-history
-
-      - name: Upload Allure report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-report
-          path: allure-report/
+          force_orphan: true
