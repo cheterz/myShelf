@@ -74,9 +74,16 @@ jobs:
           name: test-report
           path: app/build/reports/androidTests/connected/
 
-      - name: Upload Allure results
+      - name: Generate Allure report
+        if: always()
+        run: |
+          wget https://github.com/allure-framework/allure2/releases/download/2.32.0/allure-2.32.0.tgz
+          tar -xzf allure-2.32.0.tgz
+          ./allure-2.32.0/bin/allure generate ./allure-results -o ./allure-report --clean
+
+      - name: Upload Allure report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results
-          path: allure-results/
+          name: allure-report
+          path: allure-report/
