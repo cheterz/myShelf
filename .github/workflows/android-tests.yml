@@ -1,0 +1,113 @@
+name: Android Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+
+    steps:
+      # ========== ЭТАП 1: ПОДГОТОВКА ==========
+
+      # 1. Скачать код из репозитория
+      - uses: actions/checkout@v4
+
+      # 2. Установить Java 17 (нужна для Gradle)
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+
+      # 3. Настроить кэш Gradle (ускоряет сборку)
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      # ========== ЭТАП 2: ЭМУЛЯТОР ==========
+
+      # 4. Включить KVM (аппаратное ускорение эмулятора)
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      # 5. Закэшировать AVD (чтобы не создавать с нуля каждый раз)
+      - name: AVD cache
+        uses: actions/cache@v4
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ runner.os }}-api-34
+
+      # 6. Создать AVD + снапшот (только если кэша нет)
+      - name: Create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          profile: pixel_3a
+          target: google_apis
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          script: echo "Generated AVD snapshot for caching."
+
+      # ========== ЭТАП 3: ТЕСТЫ ==========
+
+      # 7. Запустить тесты + вытянуть Allure-результаты
+      - name: Run instrumented tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          profile: pixel_3a
+          target: google_apis
+          disable-animations: true
+          emulator-boot-timeout: 900
+          script: |
+            ./gradlew connectedDebugAndroidTest
+            adb pull /storage/emulated/0/Documents/allure-results ./allure-results || true
+
+      # ========== ЭТАП 4: ОТЧЁТ ==========
+
+      # 8. Скачать историю отчётов из gh-pages (если есть)
+      - name: Load Allure history
+        uses: actions/checkout@v4
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      # 9. Сгенерировать Allure-отчёт с историей
+      - name: Build Allure report
+        uses: simple-elf/allure-report-action@v1.15
+        if: always()
+        with:
+          gh_pages: gh-pages
+          allure_history: allure-history
+          allure_results: ./allure-results
+
+      # 10. Очистить .git из allure-history (чтобы не было EACCES)
+      - name: Clean allure-history from .git
+        if: always()
+        run: rm -rf allure-history/.git || true
+
+      # 11. Опубликовать отчёт на GitHub Pages
+      - name: Publish Allure report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
+          force_orphan: true
