@@ -17,7 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.cheterz.myshelf.model.loans.Loan
 import com.cheterz.myshelf.ui.common.TestTags
 import com.cheterz.myshelf.ui.common.formatDate
@@ -25,11 +25,11 @@ import com.cheterz.myshelf.viewmodel.loans.LoansListViewModel
 
 @Composable
 fun LoansListScreen(
-    viewModel: LoansListViewModel = viewModel()
+    viewModel: LoansListViewModel = hiltViewModel(),
 ) {
     LoansListContent(
         loans = viewModel.loans,
-        onAddClick = { viewModel.addFakeLoan() },
+        onAddClick = { viewModel.addLoan() },
 //        TODO add remove method
         onDeleteClick = {}
     )

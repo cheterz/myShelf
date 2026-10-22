@@ -17,7 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.cheterz.myshelf.R
 import com.cheterz.myshelf.model.items.Item
 import com.cheterz.myshelf.model.items.ItemCategory
@@ -27,7 +27,7 @@ import com.cheterz.myshelf.viewmodel.items.ItemListViewModel
 
 @Composable
 fun ItemListScreen(
-    viewModel: ItemListViewModel = viewModel(),
+    viewModel: ItemListViewModel = hiltViewModel(),
 ) {
     ItemsListContent(
         items = viewModel.items,
