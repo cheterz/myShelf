@@ -6,7 +6,9 @@ import androidx.compose.ui.test.performClick
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.cheterz.myshelf.R
@@ -15,6 +17,7 @@ import com.cheterz.myshelf.ui.items.ItemsListContent
 import com.kaspersky.components.alluresupport.withForcedAllureSupport
 import com.kaspersky.kaspresso.kaspresso.Kaspresso
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
+import io.github.kakaocup.compose.node.element.ComposeScreen.Companion.onComposeScreen
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -37,7 +40,8 @@ class ItemAddDialogKaspressoTest : TestCase(
             step("Render items list") {
                 composeRule.setContent {
                     ItemsListContent(
-                        items = emptyList(), onAddClick = { title, description, category ->
+                        items = emptyList(),
+                        onAddClick = { title, description, category ->
                             capturedTitle = title
                             capturedDescription = description
                             capturedCategory = category
@@ -120,11 +124,9 @@ class ItemAddDialogKaspressoTest : TestCase(
             var capturedCategory: String? = null
             step("Render itemsListContent") {
                 composeRule.setContent {
-                    ItemsListContent(
-                        items = emptyList(),
-                        onAddClick = { _, _, category ->
-                            capturedCategory = category
-                        }, onDeleteClick = {})
+                    ItemsListContent(items = emptyList(), onAddClick = { _, _, category ->
+                        capturedCategory = category
+                    }, onDeleteClick = {})
                 }
             }
             step("click on AddItemDialogButton") {
@@ -147,6 +149,29 @@ class ItemAddDialogKaspressoTest : TestCase(
             step("Assert category") {
                 assertEquals("BOOKS", capturedCategory)
             }
+        }
+    }
+
+    @Test
+    fun dialog_openViaComposeScreen(): Unit = run {
+        step("Render ItemsListContent") {
+            composeRule.setContent {
+                ItemsListContent(
+                    items = emptyList(),
+                    onAddClick = { _, _, _ -> },
+                    onDeleteClick = {})
+            }
+        }
+        step("Click FAB via composeScreen") {
+            onComposeScreen<ItemsListComposeScreen>(composeRule) {
+                addButton {
+                    assertIsDisplayed()
+                    performClick()
+                }
+            }
+        }
+        step("Assert dialog is opened") {
+            Espresso.onView(withId(R.id.titleInput)).check(matches(isDisplayed()))
         }
     }
 }

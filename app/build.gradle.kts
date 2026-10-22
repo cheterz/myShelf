@@ -59,6 +59,7 @@ dependencies {
 //    KASPRESSO
     androidTestImplementation("com.kaspersky.android-components:kaspresso:1.5.5")
     androidTestImplementation("com.kaspersky.android-components:kaspresso-allure-support:1.5.5")
+    androidTestImplementation("com.kaspersky.android-components:kaspresso-compose-support:1.5.5")
     androidTestImplementation("io.github.kakaocup:kakao:3.2.0")
 
 //    ALLURE
