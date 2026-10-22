@@ -10,6 +10,10 @@ jobs:
   test:
     runs-on: ubuntu-22.04
     timeout-minutes: 45
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
 
     steps:
       # ========== ЭТАП 1: ПОДГОТОВКА ==========
@@ -90,7 +94,7 @@ jobs:
 
       # 9. Сгенерировать Allure-отчёт с историей
       - name: Build Allure report
-        uses: simple-elf/allure-report-action@v1.15
+        uses: simple-elf/allure-report-action@master  
         if: always()
         with:
           gh_pages: gh-pages
