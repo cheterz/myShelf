@@ -49,19 +49,19 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ runner.os }}-api-34
+          key: avd-${{ runner.os }}-api-30
 
       # 6. Создать AVD + снапшот (только если кэша нет)
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 34
+          api-level: 30
           arch: x86_64
-          profile: pixel_3a
+          profile: pixel_5
           target: google_apis
           force-avd-creation: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot
           disable-animations: false
           script: echo "Generated AVD snapshot for caching."
 
@@ -71,11 +71,12 @@ jobs:
       - name: Run instrumented tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 34
+          api-level: 30
           arch: x86_64
-          profile: pixel_3a
+          profile: pixel_5
           target: google_apis
           disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot
           emulator-boot-timeout: 900
           script: |
             ./gradlew connectedDebugAndroidTest
@@ -83,35 +84,20 @@ jobs:
 
       # ========== ЭТАП 4: ОТЧЁТ ==========
 
-      # 8. Скачать историю отчётов из gh-pages (если есть)
-      - name: Load Allure history
-        uses: actions/checkout@v4
+      # 8. Сгенерировать Allure-отчёт с историей
+      - name: Generate Allure report
         if: always()
-        continue-on-error: true
-        with:
-          ref: gh-pages
-          path: gh-pages
+        run: |
+          wget https://github.com/allure-framework/allure2/releases/download/2.32.0/allure-2.32.0.tgz
+          tar -xzf allure-2.32.0.tgz
+          ./allure-2.32.0/bin/allure generate ./allure-results -o ./allure-report --clean
 
-      # 9. Сгенерировать Allure-отчёт с историей
-      - name: Build Allure report
-        uses: simple-elf/allure-report-action@master  
-        if: always()
-        with:
-          gh_pages: gh-pages
-          allure_history: allure-history
-          allure_results: ./allure-results
-
-      # 10. Очистить .git из allure-history (чтобы не было EACCES)
-      - name: Clean allure-history from .git
-        if: always()
-        run: rm -rf allure-history/.git || true
-
-      # 11. Опубликовать отчёт на GitHub Pages
+      # 9. Опубликовать отчёт на GitHub Pages
       - name: Publish Allure report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: allure-history
+          publish_dir: allure-report
           force_orphan: true

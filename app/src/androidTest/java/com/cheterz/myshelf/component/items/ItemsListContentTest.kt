@@ -126,7 +126,7 @@ class ItemsListContentTest {
         composeRule.onNodeWithTag(TestTags.ItemsList.ADD_BUTTON).performClick()
         Espresso.onView(withId(R.id.titleInput)).perform(typeText("HAMMER"))
         Espresso.onView(withId(R.id.descriptionInput)).perform(typeText("old hammer"))
-        Espresso.onView(withText("SAVE")).perform(click())
+        Espresso.onView(withText("SAVE")).inRoot(RootMatchers.isDialog()).perform(click())
 
         assertEquals("HAMMER", capturedTitle)
         assertEquals("old hammer", capturedDescription)
@@ -143,7 +143,7 @@ class ItemsListContentTest {
                 onDeleteClick = {})
         }
         composeRule.onNodeWithTag(TestTags.ItemsList.ADD_BUTTON).performClick()
-        Espresso.onView(withText("CANCEL")).perform(click())
+        Espresso.onView(withText("CANCEL")).inRoot(RootMatchers.isDialog()).perform(click())
 
         assertFalse(called)
     }
@@ -158,7 +158,7 @@ class ItemsListContentTest {
                 onDeleteClick = {})
         }
         composeRule.onNodeWithTag(TestTags.ItemsList.ADD_BUTTON).performClick()
-        Espresso.onView(withText("SAVE")).perform(click())
+        Espresso.onView(withText("SAVE")).inRoot(RootMatchers.isDialog()).perform(click())
 
         assertFalse(called)
     }
