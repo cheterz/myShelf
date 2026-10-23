@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -67,4 +68,11 @@ dependencies {
     androidTestImplementation("io.qameta.allure:allure-kotlin-commons:2.4.0")
     androidTestImplementation("io.qameta.allure:allure-kotlin-junit4:2.4.0")
     androidTestImplementation("io.qameta.allure:allure-kotlin-android:2.4.0")
+//    HILT
+    implementation("com.google.dagger:hilt-android:2.57.2")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.57.2")
+//    HILT compilator
+    ksp("com.google.dagger:hilt-compiler:2.57.2")
+    kspAndroidTest("com.google.dagger:hilt-compiler:2.57.2")
 }
