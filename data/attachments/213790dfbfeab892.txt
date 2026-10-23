@@ -1,0 +1,45 @@
+--------- beginning of main
+10-23 10:57:55.114  6097  6117 I KASPRESSO: ___________________________________________________________________________
+10-23 10:57:55.115  6097  6117 I KASPRESSO: Logcat buffer may be dumped from 10-23 10:57:55.114
+10-23 10:57:55.196  6097  6117 I KASPRESSO: Starting video recording: Video_ItemAddDialogKaspressoTest.mp4
+10-23 10:57:55.196  6097  6117 I KASPRESSO: Waiting for 3000 ms
+10-23 10:57:55.199  6097  6287 D KASPRESSO: Display resolution: 1080x2072; supported codec resolution: 1088x1920
+10-23 10:57:55.199  6097  6287 D KASPRESSO: Starting video recording with resolution 1080x1920
+10-23 10:57:58.196  6097  6117 I KASPRESSO: ---------------------------------------------------------------------------
+10-23 10:57:58.196  6097  6117 I KASPRESSO: BEFORE TEST SECTION
+10-23 10:57:58.196  6097  6117 I KASPRESSO: ---------------------------------------------------------------------------
+10-23 10:57:58.196  6097  6117 I KASPRESSO: ---------------------------------------------------------------------------
+10-23 10:57:58.196  6097  6117 I KASPRESSO: TEST SECTION
+10-23 10:57:58.196  6097  6117 I KASPRESSO: ---------------------------------------------------------------------------
+10-23 10:57:58.196  6097  6117 I KASPRESSO: ___________________________________________________________________________
+10-23 10:57:58.196  6097  6117 I KASPRESSO: TEST STEP: "1. Render items list" in ItemAddDialogKaspressoTest
+10-23 10:57:58.239  6097  6117 I KASPRESSO: TEST STEP: "1. Render items list" in ItemAddDialogKaspressoTest SUCCEED. It took 0 minutes, 0 seconds and 43 millis. 
+10-23 10:57:58.239  6097  6117 I KASPRESSO: ___________________________________________________________________________
+10-23 10:57:58.333  6097  6117 I KASPRESSO: Screenshot saved to /data/user/0/com.cheterz.myshelf/files/screenshots/com.cheterz.myshelf.component.items.ItemAddDialogKaspressoTest/dialog_enterData_andSave_callsOnAddClickWithData/ItemAddDialogKaspressoTest_step_1.png
+10-23 10:57:58.334  6097  6117 I KASPRESSO: ___________________________________________________________________________
+10-23 10:57:58.334  6097  6117 I KASPRESSO: TEST STEP: "2. Open add item dialog" in ItemAddDialogKaspressoTest
+10-23 10:57:58.366  6097  6117 I KASPRESSO: TEST STEP: "2. Open add item dialog" in ItemAddDialogKaspressoTest SUCCEED. It took 0 minutes, 0 seconds and 32 millis. 
+10-23 10:57:58.366  6097  6117 I KASPRESSO: ___________________________________________________________________________
+10-23 10:57:58.671  6097  6117 I KASPRESSO: Screenshot saved to /data/user/0/com.cheterz.myshelf/files/screenshots/com.cheterz.myshelf.component.items.ItemAddDialogKaspressoTest/dialog_enterData_andSave_callsOnAddClickWithData/ItemAddDialogKaspressoTest_step_2.png
+10-23 10:57:58.671  6097  6117 I KASPRESSO: ___________________________________________________________________________
+10-23 10:57:58.671  6097  6117 I KASPRESSO: TEST STEP: "3. Enter title & description" in ItemAddDialogKaspressoTest
+10-23 10:58:04.161  6097  6117 I KASPRESSO: TEST STEP: "3. Enter title & description" in ItemAddDialogKaspressoTest SUCCEED. It took 0 minutes, 5 seconds and 490 millis. 
+10-23 10:58:04.162  6097  6117 I KASPRESSO: ___________________________________________________________________________
+10-23 10:58:04.537  6097  6117 I KASPRESSO: Screenshot saved to /data/user/0/com.cheterz.myshelf/files/screenshots/com.cheterz.myshelf.component.items.ItemAddDialogKaspressoTest/dialog_enterData_andSave_callsOnAddClickWithData/ItemAddDialogKaspressoTest_step_3.png
+10-23 10:58:04.537  6097  6117 I KASPRESSO: ___________________________________________________________________________
+10-23 10:58:04.537  6097  6117 I KASPRESSO: TEST STEP: "4. click SAVE" in ItemAddDialogKaspressoTest
+10-23 10:58:05.200  6097  6117 I KASPRESSO: TEST STEP: "4. click SAVE" in ItemAddDialogKaspressoTest SUCCEED. It took 0 minutes, 0 seconds and 663 millis. 
+10-23 10:58:05.200  6097  6117 I KASPRESSO: ___________________________________________________________________________
+10-23 10:58:05.281  6097  6117 I KASPRESSO: Screenshot saved to /data/user/0/com.cheterz.myshelf/files/screenshots/com.cheterz.myshelf.component.items.ItemAddDialogKaspressoTest/dialog_enterData_andSave_callsOnAddClickWithData/ItemAddDialogKaspressoTest_step_4.png
+10-23 10:58:05.281  6097  6117 I KASPRESSO: ___________________________________________________________________________
+10-23 10:58:05.281  6097  6117 I KASPRESSO: TEST STEP: "5. Assert captured data" in ItemAddDialogKaspressoTest
+10-23 10:58:05.281  6097  6117 I KASPRESSO: TEST STEP: "5. Assert captured data" in ItemAddDialogKaspressoTest SUCCEED. It took 0 minutes, 0 seconds and 0 millis. 
+10-23 10:58:05.281  6097  6117 I KASPRESSO: ___________________________________________________________________________
+10-23 10:58:05.357  6097  6117 I KASPRESSO: Screenshot saved to /data/user/0/com.cheterz.myshelf/files/screenshots/com.cheterz.myshelf.component.items.ItemAddDialogKaspressoTest/dialog_enterData_andSave_callsOnAddClickWithData/ItemAddDialogKaspressoTest_step_5.png
+10-23 10:58:05.357  6097  6117 I KASPRESSO: ---------------------------------------------------------------------------
+10-23 10:58:05.357  6097  6117 I KASPRESSO: AFTER TEST SECTION
+10-23 10:58:05.357  6097  6117 I KASPRESSO: ---------------------------------------------------------------------------
+10-23 10:58:05.357  6097  6117 I KASPRESSO: ---------------------------------------------------------------------------
+10-23 10:58:05.357  6097  6117 I KASPRESSO: TEST PASSED
+10-23 10:58:05.357  6097  6117 I KASPRESSO: ---------------------------------------------------------------------------
+10-23 10:58:05.358  6097  6117 I KASPRESSO: Dump logcat buffer to /data/user/0/com.cheterz.myshelf/files/logcat/com.cheterz.myshelf.component.items.ItemAddDialogKaspressoTest/dialog_enterData_andSave_callsOnAddClickWithData/TestLogcat.txt: logcat -b default -d -t "10-23 10:57:55.114" -s "KASPRESSO","KASPRESSO_TEST"
