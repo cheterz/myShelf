@@ -107,7 +107,8 @@ class ItemsListContentTest {
                 onDeleteClick = {})
         }
         composeRule.onNodeWithTag(TestTags.ItemsList.ADD_BUTTON).performClick()
-        Espresso.onView(withId(com.cheterz.myshelf.R.id.titleInput)).check(matches(isDisplayed()))
+        Espresso.onView(withId(com.cheterz.myshelf.R.id.titleInput)).inRoot(RootMatchers.isDialog())
+            .check(matches(isDisplayed()))
     }
 
     @Test
@@ -124,8 +125,10 @@ class ItemsListContentTest {
             }, onDeleteClick = {})
         }
         composeRule.onNodeWithTag(TestTags.ItemsList.ADD_BUTTON).performClick()
-        Espresso.onView(withId(R.id.titleInput)).perform(typeText("HAMMER"))
-        Espresso.onView(withId(R.id.descriptionInput)).perform(typeText("old hammer"))
+        Espresso.onView(withId(R.id.titleInput)).inRoot(RootMatchers.isDialog())
+            .perform(typeText("HAMMER"))
+        Espresso.onView(withId(R.id.descriptionInput)).inRoot(RootMatchers.isDialog())
+            .perform(typeText("old hammer"))
         Espresso.onView(withText("SAVE")).inRoot(RootMatchers.isDialog()).perform(click())
 
         assertEquals("HAMMER", capturedTitle)
@@ -174,12 +177,16 @@ class ItemsListContentTest {
             )
         }
         composeRule.onNodeWithTag(TestTags.ItemsList.ADD_BUTTON).performClick()
-        Espresso.onView(withId(R.id.titleInput)).perform(typeText("Dune"))
-        Espresso.onView(withId(R.id.categorySpinner)).perform(click())
+        Espresso.onView(withId(R.id.titleInput)).inRoot(RootMatchers.isDialog())
+            .perform(typeText("Dune"))
+        Espresso.onView(withId(R.id.categorySpinner)).inRoot(RootMatchers.isDialog())
+            .perform(click())
         Espresso.onData(`is`("BOOKS"))
             .inRoot(RootMatchers.isPlatformPopup())
             .perform(click())
-        Espresso.onView(withText("SAVE")).perform(click())
+        Espresso.onView(withText("SAVE"))
+            .inRoot(RootMatchers.isDialog())
+            .perform(click())
         assertEquals("BOOKS", capturedCategory)
     }
 }
