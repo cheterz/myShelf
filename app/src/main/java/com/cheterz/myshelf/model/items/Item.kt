@@ -7,5 +7,4 @@ data class Item(
     val category: String,
     val status: String,
     val imageUri: String? = null
-
 )
