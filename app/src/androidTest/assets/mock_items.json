@@ -1,0 +1,10 @@
+[
+  {
+    "id": 1,
+    "title": "Mocked Book",
+    "description": "From MockWebServer",
+    "category": "BOOKS",
+    "status": "HOME",
+    "imageUri": null
+  }
+]
