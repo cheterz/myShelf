@@ -71,16 +71,18 @@ fun ItemsListContent(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-
-            LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-            ) {
-                items(items) { item ->
-                    ItemRow(item)
+            if (items.isEmpty()) {
+                Text("No items yet")
+            } else
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                ) {
+                    items(items) { item ->
+                        ItemRow(item)
+                    }
                 }
-            }
 
             Button(
                 onClick = onDeleteClick,
