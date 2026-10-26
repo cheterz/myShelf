@@ -86,7 +86,7 @@ class ItemAddDialogKaspressoTest : TestCase(
                 composeRule.onNodeWithTag(TestTags.ItemsList.ADD_BUTTON).performClick()
             }
             step("Click CANCEL") {
-                Espresso.onView(withText("CANCEL")).perform(click())
+                Espresso.onView(withText("CANCEL")).inRoot(RootMatchers.isDialog()).perform(click())
             }
             step("Assert addOnClick not performed") {
                 assertFalse(called)
@@ -110,7 +110,7 @@ class ItemAddDialogKaspressoTest : TestCase(
                 composeRule.onNodeWithTag(TestTags.ItemsList.ADD_BUTTON).performClick()
             }
             step("Try to click SAVE button") {
-                Espresso.onView(withText("SAVE")).perform(click())
+                Espresso.onView(withText("SAVE")).inRoot(RootMatchers.isDialog()).perform(click())
             }
             step("Assert SAVE call") {
                 assertFalse(called)
@@ -133,18 +133,20 @@ class ItemAddDialogKaspressoTest : TestCase(
                 composeRule.onNodeWithTag(TestTags.ItemsList.ADD_BUTTON).performClick()
             }
             step("Enter title") {
-                Espresso.onView(withId(R.id.titleInput)).perform(typeText("Dune"))
+                Espresso.onView(withId(R.id.titleInput)).inRoot(RootMatchers.isDialog())
+                    .perform(typeText("Dune"))
 
             }
             step("Open category spinner") {
-                Espresso.onView(withId(R.id.categorySpinner)).perform(click())
+                Espresso.onView(withId(R.id.categorySpinner)).inRoot(RootMatchers.isDialog())
+                    .perform(click())
             }
             step("select BOOKS category") {
                 Espresso.onData(`is`("BOOKS")).inRoot(RootMatchers.isPlatformPopup())
                     .perform(click())
             }
             step("click SAVE button") {
-                Espresso.onView(withText("SAVE")).perform(click())
+                Espresso.onView(withText("SAVE")).inRoot(RootMatchers.isDialog()).perform(click())
             }
             step("Assert category") {
                 assertEquals("BOOKS", capturedCategory)
@@ -171,7 +173,8 @@ class ItemAddDialogKaspressoTest : TestCase(
             }
         }
         step("Assert dialog is opened") {
-            Espresso.onView(withId(R.id.titleInput)).check(matches(isDisplayed()))
+            Espresso.onView(withId(R.id.titleInput)).inRoot(RootMatchers.isDialog())
+                .check(matches(isDisplayed()))
         }
     }
 }

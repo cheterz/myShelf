@@ -42,13 +42,15 @@ class ItemListScreenNetworkTest {
 
     @Test
     fun loadItems_fromNetwork_showsInList() {
-        mockWebServer.enqueue(MockScenario.ITEMS_SUCCESS.toResponse())
-        composeRule.onNodeWithText("Mocked Book").assertIsDisplayed()
+        step("Assert 1 item list"){
+            mockWebServer.enqueue(MockScenario.ITEMS_SUCCESS.toResponse())
+            composeRule.onNodeWithText("Mocked Book").assertIsDisplayed()
+        }
     }
 
     @Test
     fun loadItems_EmptyList() {
-        step {
+        step("Assert empty list") {
             mockWebServer.enqueue(MockScenario.ITEMS_EMPTY.toResponse())
             composeRule.onNodeWithTag(TestTags.ItemsList.ITEM_ROW).assertIsNotDisplayed()
         }
