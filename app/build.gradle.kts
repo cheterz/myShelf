@@ -76,9 +76,6 @@ dependencies {
 //    HILT compilator
     ksp("com.google.dagger:hilt-compiler:2.57.2")
     kspAndroidTest("com.google.dagger:hilt-compiler:2.57.2")
-    // Hilt testing
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.57.2")
-    kspAndroidTest("com.google.dagger:hilt-android-compiler:2.57.2")
 
     debugImplementation("androidx.test:monitor:1.6.1")
 
@@ -92,4 +89,5 @@ dependencies {
 // OkHttp (для MockWebServer и логирования)
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    androidTestImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
 }

@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cheterz.myshelf.data.remote.MyShelfApi
 import com.cheterz.myshelf.model.items.Item
 import com.cheterz.myshelf.model.items.ItemDAO
 import com.cheterz.myshelf.model.items.ItemEntity
@@ -18,12 +19,12 @@ import javax.inject.Inject
 @HiltViewModel
 class ItemListViewModel @Inject constructor(
     private val dao: ItemDAO,
+    private val api: MyShelfApi,
 ) : ViewModel() {
     fun loadFromNetwork() {
         viewModelScope.launch {
             try {
-                val remoteItems = com.cheterz.myshelf.data.remote.RetrofitClient.api.getItems()
-                items = remoteItems
+                items = api.getItems()
             } catch (e: Exception) {
                 Log.d(TAG, "loadFromNetwork: {e}", e)
             }
